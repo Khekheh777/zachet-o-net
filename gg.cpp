@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 class Employee
@@ -31,17 +32,30 @@ public:
     }
 };
 
+void saveToFile(const Employee employees[], int size, const string& filename) {
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cout << "о неттт не удалось открыть файл " << filename << endl;
+        return;
+    }
+    for (int i = 0; i < size; i++) {
+        outFile << employees[i].getId() << " " << employees[i].getName() << " " << employees[i].getSalary() << endl;
+    }
+    outFile.close(); 
+    cout << "инфа успешно сохранена в файл " << filename << endl;
+}
+
 bool isValidEmployeeData(const std::string& name, int id, double salary) {
     if (name.empty()) {
-        cout << "о неттт имя пустое" << endl;
+        cout << "о неттт mame пустое" << endl;
         return false;
     }
     if (id <= 0) {
-        cout << "о неттт айди не положительный" << endl;
+        cout << "о неттт id не положительный" << endl;
         return false;
     }
     if (salary < 0) {
-        cout << "о неттт зпшка отрицательная" << endl;
+        cout << "о неттт salary отрицательная" << endl;
         return false;
     }
     return true;
@@ -54,7 +68,6 @@ int main() {
         cout << "введите данные для работничка #" << (i + 1) << endl;
         string name;
         cout << "имя: ";
-        if (i == 0) cin.ignore();
         getline(cin, name);
         
         int id;
@@ -79,5 +92,6 @@ int main() {
     for (int i = 0; i < 3; i++) {
         cout << "ID: " << employees[i].getId() << ", Name: " << employees[i].getName() << ", Salary: " << employees[i].getSalary() << endl;
     }
+    saveToFile(employees, validEmpCount, "employees.txt");
     return 0;
 }
